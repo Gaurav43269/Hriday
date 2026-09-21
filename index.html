@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Leonida Bound — A Grand Theft Auto VI Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    box-sizing: border-box;
+    --deep: #130a24;
+    --mid: #2a1150;
+    --pink: #ff3d7f;
+    --orange: #ff9a4d;
+    --cyan: #33e6d6;
+    --cream: #f5ead6;
+    --cream-dim: rgba(245,234,214,0.62);
+    --line: rgba(245,234,214,0.14);
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth; scroll-padding-top: env(safe-area-inset-top, 0px);}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    background:var(--deep);
+    color:var(--cream);
+    font-family:'Space Grotesk', sans-serif;
+    overflow-x:hidden;
+  }
+  h1,h2,h3, .display{
+    font-family:'Bebas Neue', sans-serif;
+    font-weight:400;
+    letter-spacing:0.01em;
+    line-height:0.92;
+    margin:0;
+  }
+  img{max-width:100%;}
+  .wrap{max-width:1120px; margin:0 auto; padding:0 clamp(20px,5vw,64px);}
+  a{color:inherit;}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    min-height:100svh;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-end;
+    overflow:hidden;
+    background:
+      radial-gradient(ellipse 90% 60% at 50% 28%, rgba(255,157,77,0.55), transparent 60%),
+      linear-gradient(180deg, #1b0e3a 0%, #3a1256 32%, #7c1f5e 58%, #b5324f 74%, #e2582f 100%);
+  }
+  .sun{
+    position:absolute;
+    left:50%; top:24%;
+    width:min(46vw, 460px); height:min(46vw,460px);
+    transform:translate(-50%,-50%);
+    border-radius:50%;
+    background:linear-gradient(180deg, #ffe37a 0%, #ff9a4d 45%, #ff3d7f 100%);
+    box-shadow:0 0 140px 40px rgba(255,157,77,0.45);
+    opacity:0;
+    animation: rise 1.6s ease-out .2s forwards;
+  }
+  .sun::before{
+    content:"";
+    position:absolute; inset:0;
+    background:repeating-linear-gradient(0deg, transparent 0 8px, var(--deep) 8px 13px);
+    -webkit-mask:linear-gradient(180deg, transparent 0%, transparent 46%, black 46%);
+            mask:linear-gradient(180deg, transparent 0%, transparent 46%, black 46%);
+    opacity:0.5;
+  }
+  @keyframes rise{ from{opacity:0; transform:translate(-50%,-40%) scale(.85);} to{opacity:1; transform:translate(-50%,-50%) scale(1);} }
+
+  .grid-floor{
+    position:absolute; left:0; right:0; bottom:0; height:46%;
+    background:linear-gradient(180deg, transparent, rgba(19,10,36,0.9) 85%);
+  }
+  .grid-floor svg{position:absolute; bottom:0; left:0; width:100%; height:100%; opacity:.55;}
+
+  .skyline{position:absolute; left:0; right:0; bottom:0; width:100%; opacity:.9;}
+
+  .hero-content{position:relative; z-index:2; padding-bottom:clamp(28px,6vw,56px);}
+  .kicker{
+    font-size:0.78rem;
+    color:var(--cream-dim);
+    text-transform:none;
+    margin-bottom:10px;
+  }
+  .title-line{
+    font-size:clamp(3.4rem, 13vw, 9.5rem);
+    color:var(--cream);
+    text-shadow:0 0 30px rgba(255,61,127,0.35);
+  }
+  .title-line.grad{
+    background:linear-gradient(90deg, #ffe37a, #ff3d7f 60%, #7ef0e6);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  .hero-sub{
+    max-width:46ch;
+    margin-top:18px;
+    font-size:1.05rem;
+    color:var(--cream-dim);
+  }
+
+  .countdown{
+    display:flex; gap:clamp(10px,3vw,28px);
+    margin-top:34px;
+    flex-wrap:wrap;
+  }
+  .countdown div{ text-align:left; }
+  .countdown .num{
+    font-family:'Bebas Neue', sans-serif;
+    font-size:clamp(2rem,5vw,3.2rem);
+    color:var(--cream);
+    line-height:1;
+  }
+  .countdown .lbl{
+    font-size:0.68rem;
+    color:var(--cream-dim);
+    margin-top:4px;
+  }
+
+  /* ---------- SECTIONS ---------- */
+  section{padding:clamp(64px,10vw,120px) 0;}
+  .section-head{
+    display:flex; justify-content:space-between; align-items:flex-end; gap:24px;
+    margin-bottom:clamp(36px,6vw,60px);
+    border-bottom:1px solid var(--line);
+    padding-bottom:20px;
+  }
+  .section-head h2{
+    font-size:clamp(2.4rem,6vw,4rem);
+    color:var(--cream);
+  }
+  .section-head p{
+    max-width:32ch;
+    color:var(--cream-dim);
+    font-size:0.92rem;
+    margin:0;
+  }
+
+  /* stats */
+  .stat-row{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  .stat{
+    background:var(--deep);
+    padding:28px 22px;
+  }
+  .stat .k{
+    font-size:0.7rem;
+    color:var(--cyan);
+    margin-bottom:10px;
+  }
+  .stat .v{
+    font-family:'Bebas Neue', sans-serif;
+    font-size:clamp(1.5rem,3vw,2rem);
+    line-height:1.05;
+    color:var(--cream);
+  }
+  .stat .sub{ margin-top:8px; font-size:0.82rem; color:var(--cream-dim); }
+  @media (max-width:760px){ .stat-row{grid-template-columns:repeat(2,1fr);} }
+
+  /* setting split */
+  .setting{
+    display:grid;
+    grid-template-columns:1.1fr 0.9fr;
+    gap:56px;
+    align-items:center;
+  }
+  .setting p{ color:var(--cream-dim); line-height:1.7; margin:0 0 16px; max-width:52ch; }
+  .setting-art{
+    aspect-ratio:4/5;
+    border-radius:2px;
+    background:linear-gradient(200deg,#ff9a4d, #ff3d7f 45%, #3a1256 85%);
+    position:relative;
+    overflow:hidden;
+  }
+  .setting-art svg{position:absolute; inset:0; width:100%; height:100%;}
+  @media (max-width:820px){ .setting{grid-template-columns:1fr;} .setting-art{order:-1; aspect-ratio:16/9;} }
+
+  /* characters */
+  .chars{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    border:1px solid var(--line);
+  }
+  .char{
+    padding:clamp(28px,4vw,48px);
+    position:relative;
+  }
+  .char + .char{ border-left:1px solid var(--line); }
+  .char .name{
+    font-family:'Bebas Neue', sans-serif;
+    font-size:clamp(2rem,4vw,2.8rem);
+  }
+  .char.jason .name{ color:var(--cyan); }
+  .char.lucia .name{ color:var(--pink); }
+  .char p{ color:var(--cream-dim); line-height:1.7; margin-top:14px; max-width:38ch;}
+  @media (max-width:760px){ .chars{grid-template-columns:1fr;} .char + .char{border-left:none; border-top:1px solid var(--line);} }
+
+  /* timeline */
+  .timeline{ position:relative; padding-left:28px; }
+  .timeline::before{
+    content:""; position:absolute; left:6px; top:6px; bottom:6px; width:1px;
+    background:linear-gradient(var(--cyan), var(--pink));
+  }
+  .tl-item{ position:relative; padding-bottom:34px; }
+  .tl-item:last-child{ padding-bottom:0; }
+  .tl-item::before{
+    content:""; position:absolute; left:-28px; top:4px; width:9px; height:9px; border-radius:50%;
+    background:var(--cream); box-shadow:0 0 0 4px var(--deep);
+  }
+  .tl-date{ font-size:0.78rem; color:var(--cyan); margin-bottom:4px; }
+  .tl-title{ font-family:'Bebas Neue', sans-serif; font-size:1.5rem; }
+  .tl-text{ color:var(--cream-dim); margin-top:6px; max-width:58ch; line-height:1.65; font-size:0.94rem; }
+
+  /* editions */
+  .editions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:24px;
+  }
+  .edition{
+    border:1px solid var(--line);
+    padding:clamp(24px,3vw,36px);
+    display:flex; flex-direction:column;
+  }
+  .edition.ultimate{
+    border-color:var(--pink);
+    background:linear-gradient(180deg, rgba(255,61,127,0.07), transparent 40%);
+  }
+  .edition .etitle{ font-family:'Bebas Neue', sans-serif; font-size:2rem; }
+  .edition .price{ font-size:1.6rem; margin-top:4px; color:var(--cream); }
+  .edition ul{ list-style:none; padding:0; margin:20px 0 0; color:var(--cream-dim); font-size:0.92rem; }
+  .edition li{ padding:9px 0; border-top:1px solid var(--line); }
+  .edition li:first-child{ border-top:none; }
+  @media (max-width:760px){ .editions{grid-template-columns:1fr;} }
+
+  /* footer */
+  footer{
+    border-top:1px solid var(--line);
+    padding:40px 0;
+    color:var(--cream-dim);
+    font-size:0.82rem;
+    line-height:1.7;
+  }
+  footer .wrap{ display:flex; justify-content:space-between; gap:24px; flex-wrap:wrap; }
+  footer strong{ color:var(--cream); }
+
+  @media (prefers-reduced-motion: reduce){
+    .sun{ animation:none; opacity:1; }
+  }
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="sun"></div>
+
+  <svg class="skyline" viewBox="0 0 1200 220" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <g fill="#150a28">
+      <rect x="0" y="120" width="46" height="100"/>
+      <rect x="52" y="80" width="30" height="140"/>
+      <rect x="90" y="140" width="60" height="80"/>
+      <rect x="158" y="60" width="24" height="160"/>
+      <rect x="190" y="100" width="40" height="120"/>
+      <rect x="240" y="150" width="80" height="70"/>
+      <rect x="330" y="40" width="20" height="180"/>
+      <rect x="360" y="90" width="50" height="130"/>
+      <polygon points="410,90 435,90 440,60 452,90 470,90 470,220 410,220"/>
+      <rect x="480" y="130" width="70" height="90"/>
+      <rect x="560" y="70" width="26" height="150"/>
+      <rect x="600" y="110" width="46" height="110"/>
+      <rect x="660" y="50" width="22" height="170"/>
+      <rect x="694" y="130" width="90" height="90"/>
+      <rect x="800" y="90" width="30" height="130"/>
+      <rect x="840" y="150" width="60" height="70"/>
+      <rect x="912" y="60" width="24" height="160"/>
+      <rect x="946" y="100" width="40" height="120"/>
+      <rect x="1000" y="140" width="70" height="80"/>
+      <rect x="1082" y="80" width="26" height="140"/>
+      <rect x="1120" y="120" width="80" height="100"/>
+    </g>
+  </svg>
+
+  <div class="grid-floor">
+    <svg viewBox="0 0 1200 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="gl" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#33e6d6" stop-opacity="0.9"/>
+          <stop offset="1" stop-color="#33e6d6" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <g stroke="url(#gl)" stroke-width="1.4">
+        <line x1="600" y1="0" x2="0" y2="300"/>
+        <line x1="600" y1="0" x2="120" y2="300"/>
+        <line x1="600" y1="0" x2="260" y2="300"/>
+        <line x1="600" y1="0" x2="420" y2="300"/>
+        <line x1="600" y1="0" x2="600" y2="300"/>
+        <line x1="600" y1="0" x2="780" y2="300"/>
+        <line x1="600" y1="0" x2="940" y2="300"/>
+        <line x1="600" y1="0" x2="1080" y2="300"/>
+        <line x1="600" y1="0" x2="1200" y2="300"/>
+      </g>
+      <g stroke="url(#gl)" stroke-width="1">
+        <line x1="0" y1="40" x2="1200" y2="40"/>
+        <line x1="0" y1="90" x2="1200" y2="90"/>
+        <line x1="0" y1="160" x2="1200" y2="160"/>
+        <line x1="0" y1="260" x2="1200" y2="260"/>
+      </g>
+    </svg>
+  </div>
+
+  <div class="hero-content wrap">
+    <div class="kicker">An unofficial Grand Theft Auto VI companion — not affiliated with Rockstar Games or Take-Two</div>
+    <h1>
+      <span class="title-line">GRAND THEFT AUTO</span><br>
+      <span class="title-line grad">VI</span>
+    </h1>
+    <p class="hero-sub">Jason and Lucia land in Leonida, a fractured, neon-lit take on modern Florida. Here's everything confirmed so far, in one place.</p>
+
+    <div class="countdown" id="countdown">
+      <div><div class="num" id="cd-d">00</div><div class="lbl">Days</div></div>
+      <div><div class="num" id="cd-h">00</div><div class="lbl">Hours</div></div>
+      <div><div class="num" id="cd-m">00</div><div class="lbl">Minutes</div></div>
+      <div><div class="num" id="cd-s">00</div><div class="lbl">Seconds</div></div>
+      <div><div class="num" style="color:var(--cyan)">Nov 19</div><div class="lbl">2026 · PS5 / Xbox Series X|S</div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <h2>The basics</h2>
+      <p>What's locked in, straight from Rockstar and Take-Two's own announcements.</p>
+    </div>
+    <div class="stat-row">
+      <div class="stat">
+        <div class="k">RELEASE DATE</div>
+        <div class="v">Nov 19, 2026</div>
+        <div class="sub">Confirmed twice in 2026, most recently reaffirmed alongside the August gameplay reveal.</div>
+      </div>
+      <div class="stat">
+        <div class="k">PLATFORMS</div>
+        <div class="v">PS5 · Xbox Series X|S</div>
+        <div class="sub">No PC version announced yet — a PC release would likely land well after launch, following series tradition.</div>
+      </div>
+      <div class="stat">
+        <div class="k">STANDARD EDITION</div>
+        <div class="v">£69.99</div>
+        <div class="sub">UK pricing as confirmed at pre-order; regional pricing varies.</div>
+      </div>
+      <div class="stat">
+        <div class="k">ULTIMATE EDITION</div>
+        <div class="v">£89.99</div>
+        <div class="sub">Includes bonus content on top of the base game.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap setting">
+    <div>
+      <div class="section-head" style="border:none; padding:0; margin-bottom:22px;">
+        <h2>Welcome to Leonida</h2>
+      </div>
+      <p>The game is set in the state of Leonida, a fictionalized stretch of Florida built around a reimagined Vice City. Rockstar has described it as the biggest and most detailed world it has built for the series, spanning the neon core of the city out into surrounding towns, swamps, and coastline.</p>
+      <p>The August 2026 "Extended Look" was the most detailed footage shown so far — captured entirely in-engine on PS5 — and gave the clearest picture yet of how the city, its outskirts, and its people fit together.</p>
+    </div>
+    <div class="setting-art">
+      <svg viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
+        <rect width="400" height="500" fill="none"/>
+        <g fill="#150a28" opacity="0.85">
+          <rect x="30" y="260" width="34" height="180"/>
+          <rect x="70" y="200" width="26" height="240"/>
+          <rect x="104" y="300" width="50" height="140"/>
+          <rect x="162" y="140" width="22" height="300"/>
+          <rect x="190" y="220" width="36" height="220"/>
+          <rect x="234" y="180" width="60" height="260"/>
+          <rect x="302" y="240" width="24" height="200"/>
+          <rect x="334" y="280" width="40" height="160"/>
+        </g>
+        <circle cx="205" cy="130" r="70" fill="#ffdca0" opacity="0.9"/>
+        <rect x="0" y="435" width="400" height="65" fill="#0e0620"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Two leads</h2>
+      <p>The story follows a couple whose partnership drives the whole narrative.</p>
+    </div>
+    <div class="chars">
+      <div class="char jason">
+        <div class="name">Jason</div>
+        <p>One half of the couple at the center of the story. Rockstar has framed the narrative around the pressure of trying to get ahead in a world stacked against him.</p>
+      </div>
+      <div class="char lucia">
+        <div class="name">Lucia</div>
+        <p>The series' first playable woman protagonist in the 3D-era mainline games. Her arc has been positioned as equally central to the story, not a side character.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <h2>How we got here</h2>
+      <p>The date moved twice before landing where it is now.</p>
+    </div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-date">December 2023</div>
+        <div class="tl-title">First trailer</div>
+        <div class="tl-text">Rockstar's debut trailer confirmed the game and pointed to a 2025 release window, without a specific date.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">May 2025</div>
+        <div class="tl-title">First firm date</div>
+        <div class="tl-text">Rockstar set May 26, 2026 as the release date — the first exact day attached to the game.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">Late 2025</div>
+        <div class="tl-title">Pushed to November</div>
+        <div class="tl-text">On a Take-Two earnings call, the date shifted to November 19, 2026, with the extra months put toward polish.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">June 25, 2026</div>
+        <div class="tl-title">Pre-orders open</div>
+        <div class="tl-text">Pre-orders went live worldwide with the November date holding steady.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">August 27, 2026</div>
+        <div class="tl-title">Extended Look</div>
+        <div class="tl-text">A full in-engine gameplay reveal, the deepest look yet at Jason, Lucia, and the wider state of Leonida.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Choosing an edition</h2>
+      <p>Two ways to pre-order, as confirmed by Rockstar.</p>
+    </div>
+    <div class="editions">
+      <div class="edition">
+        <div class="etitle">Standard</div>
+        <div class="price">£69.99</div>
+        <ul>
+          <li>Base game on PS5 or Xbox Series X|S</li>
+          <li>Vintage Vice City pre-order pack (eligible orders)</li>
+          <li>One month of GTA+ with digital pre-order</li>
+        </ul>
+      </div>
+      <div class="edition ultimate">
+        <div class="etitle">Ultimate</div>
+        <div class="price">£89.99</div>
+        <ul>
+          <li>Everything in Standard</li>
+          <li>Additional bonus content bundled at launch</li>
+          <li>Priority access to pre-load ahead of release</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div><strong>Leonida Bound</strong> — an independent, unofficial fan guide.</div>
+    <div>Not affiliated with, endorsed by, or sponsored by Rockstar Games or Take-Two Interactive. Grand Theft Auto and related marks belong to their respective owners.</div>
+  </div>
+</footer>
+
+<script>
+  (function(){
+    var target = new Date("2026-11-19T00:00:00");
+    var d = document.getElementById('cd-d');
+    var h = document.getElementById('cd-h');
+    var m = document.getElementById('cd-m');
+    var s = document.getElementById('cd-s');
+    function pad(n){ return String(n).padStart(2,'0'); }
+    function tick(){
+      var diff = target - new Date();
+      if(diff < 0) diff = 0;
+      var days = Math.floor(diff / 86400000);
+      var hours = Math.floor((diff % 86400000) / 3600000);
+      var mins = Math.floor((diff % 3600000) / 60000);
+      var secs = Math.floor((diff % 60000) / 1000);
+      d.textContent = days;
+      h.textContent = pad(hours);
+      m.textContent = pad(mins);
+      s.textContent = pad(secs);
+    }
+    tick();
+    setInterval(tick, 1000);
+  })();
+</script>
+
+</body>
+</html>
